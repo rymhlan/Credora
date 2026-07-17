@@ -1,0 +1,32 @@
+services:
+  api:
+    build: .
+    ports:
+      - "4000:4000"
+    env_file: .env
+    environment:
+      - DATABASE_URL=postgresql://credora:credora@postgres:5432/credora_db?schema=public
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: credora
+      POSTGRES_PASSWORD: credora
+      POSTGRES_DB: credora_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U credora -d credora_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
