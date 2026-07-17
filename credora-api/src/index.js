@@ -11,9 +11,17 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
 // Health-check endpoint
-app.get("/health", (req, res) => {
-  res.status(200).json({ status: "ok" });
+app.get("/health", async (req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.status(200).json({ status: "ok", db: "connected" });
+  } catch (error) {
+    res.status(200).json({ status: "ok", db: "disconnected" });
+  }
 });
 
 // Start server

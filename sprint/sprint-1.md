@@ -29,7 +29,7 @@
 
 ---
 
-- [ ] **Task 3: [credora-api] Prisma migration + health-check endpoint konek ke DB**
+- [x] **Task 3: [credora-api] Prisma migration + health-check endpoint konek ke DB**
   - Acceptance: Migration pertama (`init`) berhasil dijalankan via `docker compose exec api npx prisma migrate dev --name init`, tabel `User` terbentuk di PostgreSQL. Endpoint `GET /health` diperluas: selain `status: "ok"`, juga mengecek koneksi Prisma ke database dan mengembalikan `{ "status": "ok", "db": "connected" }`. Jika DB unreachable, mengembalikan `{ "status": "ok", "db": "disconnected" }`.
   - Verify: (1) `docker compose up --build`, (2) `docker compose exec api npx prisma migrate dev --name init` sukses, (3) `curl http://localhost:4000/health` → `{ "status": "ok", "db": "connected" }`, (4) Buka Prisma Studio (`docker compose exec api npx prisma studio`) dan pastikan tabel `User` terlihat.
   - Files:
